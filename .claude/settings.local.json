@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c \"wmic process where ProcessId=30064 delete\")"
+    ]
+  }
+}
