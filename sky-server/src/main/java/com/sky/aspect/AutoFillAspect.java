@@ -41,7 +41,7 @@ public class AutoFillAspect
         OperationType operationType=autoFill.value();
         //获取实体
         Object[] args=joinPoint.getArgs();
-        if(args.length==0 || args==null)
+        if(args==null || args.length==0)
         {
             return;
         }
