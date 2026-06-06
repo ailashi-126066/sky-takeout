@@ -35,7 +35,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
      * 添加购物车
      * @param shoppingCartDTO
      */
-    @Override
     public void addShoppingCart(ShoppingCartDTO shoppingCartDTO)
     {
         //判断商品是否存在
@@ -77,5 +76,55 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
             shoppingCart.setCreateTime(LocalDateTime.now());
             shoppingCartMapper.insert(shoppingCart);
         }
+    }
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    public List<ShoppingCart> showShoppingCart()
+    {
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(userId)
+                .build();
+        return shoppingCartMapper.list(shoppingCart);
+    }
+
+
+    public void cleanShoppingCart()
+    {
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.deleteByUserId(userId);
+    }
+
+
+    public void subShoppingCart(ShoppingCartDTO shoppingCartDTO)
+    {
+        //判断商品是否存在
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        Long userId= BaseContext.getCurrentId();
+        shoppingCart.setUserId(userId);
+
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+
+        //如果商品存在则数量减一
+        if (list!=null && list.size()>0)
+        {
+            ShoppingCart cart = list.get(0);
+            Integer number = cart.getNumber();
+            if (number == 1)
+            {
+                shoppingCartMapper.deleteById(cart.getId());
+            }
+            else
+            {
+                cart.setNumber(cart.getNumber() - 1);
+                shoppingCartMapper.updateNumberById(cart);
+            }
+        }
+
+
     }
 }
