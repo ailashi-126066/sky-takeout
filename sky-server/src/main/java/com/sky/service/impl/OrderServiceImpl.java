@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService
         Long userId= BaseContext.getCurrentId();
         shoppingCart.setUserId(userId);
         List<ShoppingCart> shoppingCartList= shoppingCartMapper.list(shoppingCart);
-        if (shoppingCartList.size()==0 || shoppingCartList==null)
+        if (shoppingCartList==null || shoppingCartList.size()==0)
         {
             throw  new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
         }
